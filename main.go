@@ -13,10 +13,10 @@ const (
 )
 
 type UserInfo struct {
+	UserName string `json:"user_name"`
 	TeamName string `json:"team_name"`
 	RealName string `json:"real_name"`
 	SchoolName string `json:"school_name"`
-	CoachName string `json:"coach_name"`
 }
 
 func main() {
@@ -48,7 +48,9 @@ func main() {
 			if userInfo != nil {
 				ui := UserInfo {
 					TeamName: userInfo.User.Name,
-					RealName: userInfo.User.Id,
+					UserName: userInfo.User.Id,
+					RealName: userInfo.User.Name,
+					SchoolName: "北京师范大学(珠海校区)",
 				}
 				_, _ = ctx.JSON(RESTfulAPIResult{
 					Status: true,
