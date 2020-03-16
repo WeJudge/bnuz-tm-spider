@@ -1,4 +1,4 @@
-package main
+package src
 
 type RESTfulAPIResult struct {
 	Status bool `json:"status"`
