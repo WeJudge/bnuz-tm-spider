@@ -2,6 +2,7 @@ package src
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -60,13 +61,18 @@ func buildClient (cookies *cookiejar.Jar, redirectCallback func(*http.Request, [
 
 
 func initLogin (cookies *cookiejar.Jar) string {
-	req, err := http.NewRequest("GET", "http://tm.bnuz.edu.cn/login", nil)
+	req, err := http.NewRequest("GET", "http://tm.bnuz.edu.cn/ui/login", nil)
 	if err != nil { return "" }
 	req.Header.Set("User-Agent", UserAgent)
 
 	client := buildClient(cookies, nil)
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
+	fmt.Printf("[/ui/login]教务接口应答状态码：%d", resp.StatusCode)
+	if err == nil || resp.StatusCode != 200 {
+		fmt.Println(err.Error())
+		return ""
+	}
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil { return "" }
 
@@ -99,6 +105,11 @@ func postLogin(cookies *cookiejar.Jar, xsrftoken string, username string, passwo
 
 	client := buildClient(cookies, noRedirect)
 	resp, err := client.Do(req)
+	fmt.Printf("[/uaa/login]教务接口应答状态码：%d", resp.StatusCode)
+	if err == nil || resp.StatusCode != 200 {
+		fmt.Println(err.Error())
+		return false
+	}
 	defer resp.Body.Close()
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -119,6 +130,11 @@ func getUserInfo(cookies *cookiejar.Jar) *UserLoginedInfo {
 
 	client := buildClient(cookies, nil)
 	resp, err := client.Do(req)
+	fmt.Printf("[/uaa/login]教务接口应答状态码：%d", resp.StatusCode)
+	if err == nil || resp.StatusCode != 200 {
+		fmt.Println(err.Error())
+		return nil
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil { return nil }

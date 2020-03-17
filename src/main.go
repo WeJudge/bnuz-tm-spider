@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	PortalToken string = "12345"
+	PortalToken string = "123456"
 	PortalListen string = "0.0.0.0:7777"
 )
 
